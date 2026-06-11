@@ -10,7 +10,7 @@ const C = {
   coralText: "#bd571b", coralDot: "#e85f30",
 };
 const SERIF = '"Requiem Text","Requiem","Hoefler Text","Iowan Old Style",Georgia,serif';
-const SANS  = '"hypatia-sans-pro","Hypatia Sans Pro","Avenir Next","Segoe UI",system-ui,sans-serif';
+const SANS  = 'avenir-next-lt-pro,"Avenir Next","Segoe UI",system-ui,sans-serif';
 const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
 
 const PILLARS = [
@@ -102,7 +102,7 @@ export default function App() {
     // Warm up the Typekit connection before the kit CSS / font files are requested.
     add("tk-preconnect", { rel: "preconnect", href: "https://use.typekit.net", crossOrigin: "anonymous" });
     add("tk-preconnect-css", { rel: "preconnect", href: "https://use.typekit.net" });
-    add("tk-hypatia", { rel: "stylesheet", href: "https://use.typekit.net/jqp6jnv.css" });
+    add("tk-hypatia", { rel: "stylesheet", href: "https://use.typekit.net/zjz8ltj.css" });
   }, []);
 
   const N = DATA.length;
@@ -193,21 +193,19 @@ export default function App() {
         {tab === "rankings" && <>
           <div className="sr-only" aria-live="polite">{`Rankings updated. ${shown.length} countries shown${shown[0] ? `, led by ${shown[0].c}` : ""}.${us ? ` United States ranks ${us.rank} of ${N} overall.` : ""}`}</div>
           {/* intro */}
-          <div style={{ maxWidth: 760, marginBottom: 26 }}>
-            <div style={eyebrow}>Greatest country on earth?</div>
-            <h1 style={{ fontFamily: SERIF, fontSize: 27, lineHeight: 1.1, margin: "6px 0 16px", fontWeight: 600, color: C.navy, fontStyle: "italic" }}>
-              Put the claim to the test.
+          <div style={{ maxWidth: 1180, marginBottom: 40 }}>
+            <h1 style={{ fontFamily: SERIF, fontSize: 36, lineHeight: 1.1, margin: "6px 0 16px", fontWeight: 400, color: C.navy, fontStyle: "italic" }}>
+              Greatest country on earth? You decide.
             </h1>
             <p style={{ fontSize: 15.5, lineHeight: 1.62, margin: "0 0 12px" }}>
-              This started with a refrain you hear constantly: that the United States is the greatest country on earth.
-              It’s worth taking seriously enough to actually check. “Great” pulls in two directions — how good a country is
-              to <em>live in</em>, and how much weight it throws around in the <em>world</em> — so <strong style={{ color: C.navy }}>BEACON</strong> measures
-              both, across six pillars: health and longevity, material and human development, freedom and rights, safety,
-              governance and integrity, and a country’s global power and influence.
+              Even now, Americans hear it regularly: the United States is the greatest country on earth. But is it? And what does that even mean?
+            </p>
+            <p style={{ fontSize: 15.5, lineHeight: 1.62, margin: "0 0 12px" }}>
+              The answer depends on what you value — and how you balance those values against each other. Global might? Material wealth? Personal freedom? It’s up for debate.
+              <strong style={{ color: C.navy }}>BEACON</strong> allows you to weight six pillars of national performance and well-being as you see fit: health and longevity, material and human development, freedom and rights, safety, governance and integrity, and a country’s global power and influence.
             </p>
             <p style={{ fontSize: 15.5, lineHeight: 1.62, margin: "0 0 18px" }}>
-              Below are {N} countries scored on those six pillars from reputable sources. You decide how much each pillar counts — the ranking,
-              and how much each country’s position depends on those choices, updates as you go.
+              Below are {N} countries scored on those six pillars from reputable sources. You decide how much each pillar counts. The rankings then update as you go.
             </p>
           </div>
 
@@ -216,15 +214,15 @@ export default function App() {
             <div style={{ flex: "1 1 290px", minWidth: 270, position: "sticky", top: 92, zIndex: 10, background: C.paper }}>
               <div style={{ background: "#fff", border: `1px solid ${C.grey}`, borderRadius: 10, padding: 18 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                  <h2 style={{ fontFamily: SANS, fontSize: 13, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.navy, margin: 0 }}>Weigh the Pillars</h2>
-                  <button onClick={() => setWeights({ ...EQUAL })} style={{ fontFamily: MONO, fontSize: 10, letterSpacing: 1, textTransform: "uppercase", color: C.coralText, background: "none", border: "none", cursor: "pointer", padding: "7px 8px", margin: "-7px -8px", fontWeight: 700 }}>Reset</button>
+                  <h2 style={{ fontFamily: SANS, fontSize: 14, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.navy, margin: 0 }}>Weigh the Pillars</h2>
+                  <button onClick={() => setWeights({ ...EQUAL })} style={{ fontFamily: MONO, fontSize: 11, letterSpacing: 1, textTransform: "uppercase", color: C.coralText, background: "none", border: "none", cursor: "pointer", padding: "7px 8px", margin: "-7px -8px", fontWeight: 700 }}>Reset</button>
                 </div>
                 <div style={{ height: 3, width: 40, background: C.coralLt, borderRadius: 2, marginBottom: 12 }} />
                 <p style={{ fontSize: 12, color: C.slate, margin: "0 0 14px" }}>Equal weights aren’t neutral — they assert each pillar matters the same. Your call.</p>
                 {PILLARS.map((p) => (
                   <div key={p.key} style={{ marginBottom: 13 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                      <span style={{ fontSize: 12.5, fontWeight: 600, color: C.navy, display: "flex", alignItems: "center", gap: 7 }}>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: C.navy, display: "flex", alignItems: "center", gap: 7 }}>
                         <span style={{ width: 10, height: 10, borderRadius: 2, background: p.hue }} />{p.label}
                       </span>
                       <span style={{ fontFamily: MONO, fontSize: 12, color: C.slate }}>{weights[p.key]}</span>
@@ -232,21 +230,21 @@ export default function App() {
                     <input type="range" min="0" max="100" value={weights[p.key]} aria-label={`Weight for ${p.label}`} style={{ width: "100%" }} onChange={(e) => setW(p.key, +e.target.value)} />
                   </div>
                 ))}
-                <div style={{ borderTop: `1px solid ${C.grey}`, marginTop: 6, paddingTop: 13 }}>
-                  <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: C.navy, marginBottom: 7, marginTop: 0 }}>How pillars combine</h3>
+                <div style={{ borderTop: `1px solid ${C.grey}`, marginTop: 10, paddingTop: 13 }}>
+                  <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: C.navy, marginBottom: 10, marginTop: 0 }}>How pillars combine</h3>
                   <div style={{ display: "flex", gap: 6, marginBottom: 11 }}>
                     {[["geometric", "Geometric"], ["arithmetic", "Arithmetic"]].map(([v, l]) => (
-                      <button key={v} onClick={() => setMode(v)} aria-pressed={mode === v} style={{ flex: 1, fontSize: 11.5, letterSpacing: 1, textTransform: "uppercase", fontWeight: 700, padding: "7px 4px", cursor: "pointer", borderRadius: 6, border: `1px solid ${mode === v ? C.coralText : C.grey}`, background: mode === v ? C.coralText : "#fff", color: mode === v ? "#fff" : C.slate }}>{l}</button>
+                      <button key={v} onClick={() => setMode(v)} aria-pressed={mode === v} style={{ flex: 1, fontSize: 12, letterSpacing: 1, textTransform: "uppercase", fontWeight: 700, fontFamily: SANS, padding: "7px 4px", cursor: "pointer", borderRadius: 6, border: `1px solid ${mode === v ? C.coralText : C.grey}`, background: mode === v ? C.coralText : "#fff", color: mode === v ? "#fff" : C.slate }}>{l}</button>
                     ))}
                   </div>
-                  <div style={{ fontSize: 11, color: C.slate, lineHeight: 1.45, marginBottom: 13 }}>
+                  <div style={{ fontSize: 12, color: C.slate, lineHeight: 1.45, marginBottom: 13 }}>
                     {mode === "geometric" ? "Geometric mean penalizes imbalance — no riding one stellar pillar while flunking another." : "Arithmetic mean lets a strong pillar fully offset a weak one."}
                   </div>
                   <label htmlFor="bcn-region" style={{ display: "block", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: C.navy, marginBottom: 6 }}>Region</label>
                   <select id="bcn-region" value={region} onChange={(e) => setRegion(e.target.value)} style={{ width: "100%", fontSize: 13, padding: "6px 8px", borderRadius: 6, border: `1px solid ${C.grey}`, background: "#fff", marginBottom: 12, fontFamily: SANS, color: C.navy }}>
                     {regions.map((r) => <option key={r}>{r}</option>)}
                   </select>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, cursor: "pointer", color: C.slate, minHeight: 24, padding: "4px 0" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, cursor: "pointer", color: C.slate, minHeight: 24, padding: "4px 0" }}>
                     <input type="checkbox" checked={showBands} onChange={(e) => setShowBands(e.target.checked)} />Show rank-uncertainty bands
                   </label>
                 </div>
@@ -257,7 +255,7 @@ export default function App() {
             <div style={{ flex: "2 1 560px", minWidth: 340, position: "relative", zIndex: 1 }}>
               {showBands && (
                 <div style={{ background: C.wash, border: `1px solid ${C.grey}`, borderLeft: `3px solid ${C.coralLt}`, borderRadius: 8, padding: "10px 14px", marginBottom: 12, fontSize: 12.5, color: C.slate, lineHeight: 1.5 }}>
-                  The bar spans where each country lands across 500 random weightings — <b>lower placements to the left, higher to the right</b>. Short bar = robust rank; long bar = mostly an artifact of weighting. The <span style={{ color: C.coralDot, fontWeight: 700 }}>●</span> marks its rank under your weights. Click any country for its profile.
+                  The bar spans where each country lands across 500 random weightings. Short bar = robust rank; long bar = mostly an artifact of weighting. The <span style={{ color: C.coralDot, fontWeight: 700 }}>●</span> marks its rank under your current weights. Click any country for details.
                 </div>
               )}
               <div style={{ background: "#fff", border: `1px solid ${C.grey}`, borderRadius: 10, overflow: "hidden" }}>
