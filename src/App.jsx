@@ -30,6 +30,69 @@ const TIERS = [
 ];
 const PK = PILLARS.map((p) => p.key);
 const EQUAL = PILLARS.reduce((o, p) => ((o[p.key] = 50), o), {});
+const VALID_REGIONS = new Set(["All", ...new Set(DATA.map((d) => d.region))]);
+
+// Read a shared config from the URL query string. Every field is validated and
+// missing/invalid fields are simply omitted, so callers fall back per-field.
+function parseConfig() {
+  if (typeof window === "undefined") return {};
+  const sp = new URLSearchParams(window.location.search);
+  const cfg = {};
+  const w = sp.get("w");
+  if (w) {
+    const parts = w.split(",");
+    if (parts.length === PK.length) {
+      const wObj = {};
+      const ok = parts.every((s, i) => {
+        const n = Number(s);
+        if (s.trim() === "" || !Number.isFinite(n) || n < 0 || n > 100) return false;
+        wObj[PK[i]] = Math.round(n);
+        return true;
+      });
+      if (ok) cfg.weights = wObj;
+    }
+  }
+  const mode = sp.get("mode");
+  if (mode === "geometric" || mode === "arithmetic") cfg.mode = mode;
+  const region = sp.get("region");
+  if (region && VALID_REGIONS.has(region)) cfg.region = region;
+  const bands = sp.get("bands");
+  if (bands === "1" || bands === "0") cfg.showBands = bands === "1";
+  return cfg;
+}
+
+// Serialize the current config to a query string. Region is omitted when "All"
+// to keep the common case tidy; weights are in PILLAR order.
+function buildQuery(weights, mode, region, showBands) {
+  const sp = new URLSearchParams();
+  sp.set("w", PK.map((k) => weights[k]).join(","));
+  sp.set("mode", mode);
+  if (region !== "All") sp.set("region", region);
+  sp.set("bands", showBands ? "1" : "0");
+  return sp.toString();
+}
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch { /* fall through to legacy path */ }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 function composite(p, w, mode) {
   const S = PK.reduce((a, k) => a + w[k], 0);
@@ -82,12 +145,14 @@ const fmt = (n, d = 0) => n == null ? "—" : Number(n).toLocaleString(undefined
 const eyebrow = { fontFamily: MONO, fontSize: 10.5, letterSpacing: 2, textTransform: "uppercase", color: C.coralText, fontWeight: 700 };
 
 export default function App() {
+  const initial = useMemo(() => parseConfig(), []);
   const [tab, setTab] = useState("rankings");
-  const [weights, setWeights] = useState({ ...EQUAL });
-  const [mode, setMode] = useState("geometric");
-  const [region, setRegion] = useState("All");
+  const [weights, setWeights] = useState(initial.weights ?? { ...EQUAL });
+  const [mode, setMode] = useState(initial.mode ?? "geometric");
+  const [region, setRegion] = useState(initial.region ?? "All");
   const [expanded, setExpanded] = useState(null);
-  const [showBands, setShowBands] = useState(true);
+  const [showBands, setShowBands] = useState(initial.showBands ?? true);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     document.documentElement.lang = "en";
@@ -104,6 +169,23 @@ export default function App() {
     add("tk-preconnect-css", { rel: "preconnect", href: "https://use.typekit.net" });
     add("tk-hypatia", { rel: "stylesheet", href: "https://use.typekit.net/zjz8ltj.css" });
   }, []);
+
+  // Keep the address bar in sync with the current config so it can be bookmarked,
+  // refreshed, and shared via the back/forward stack.
+  useEffect(() => {
+    const qs = buildQuery(weights, mode, region, showBands);
+    const url = `${window.location.pathname}${qs ? `?${qs}` : ""}${window.location.hash}`;
+    window.history.replaceState(null, "", url);
+  }, [weights, mode, region, showBands]);
+
+  const shareConfig = async () => {
+    const qs = buildQuery(weights, mode, region, showBands);
+    const url = `${window.location.origin}${window.location.pathname}${qs ? `?${qs}` : ""}`;
+    if (await copyText(url)) {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   const N = DATA.length;
   const regions = ["All", ...Array.from(new Set(DATA.map((d) => d.region))).sort()];
@@ -247,6 +329,19 @@ export default function App() {
                   <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, cursor: "pointer", color: C.slate, minHeight: 24, padding: "4px 0" }}>
                     <input type="checkbox" checked={showBands} onChange={(e) => setShowBands(e.target.checked)} />Show rank-uncertainty bands
                   </label>
+                  <button onClick={shareConfig} aria-live="polite" style={{
+                    marginTop: 12, width: "100%", fontFamily: SANS, fontSize: 12, letterSpacing: 1, textTransform: "uppercase",
+                    fontWeight: 700, padding: "9px 4px", cursor: "pointer", borderRadius: 6, border: `1px solid ${C.coralText}`,
+                    background: copied ? "#fff" : C.coralText, color: copied ? C.coralText : "#fff",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "background 120ms, color 120ms",
+                  }}>
+                    {copied ? "Link copied" : "Share current config"}
+                    {copied ? (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+                    ) : (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" /></svg>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
