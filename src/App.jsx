@@ -14,12 +14,12 @@ const SANS  = 'avenir-next-lt-pro,"Avenir Next","Segoe UI",system-ui,sans-serif'
 const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
 
 const PILLARS = [
-  { key: "health",      label: "Health & Longevity",          short: "Health",      hue: "#0a78a7" },
-  { key: "development", label: "Material & Human Development", short: "Development", hue: "#3A4F66" },
-  { key: "freedom",     label: "Freedom & Rights",            short: "Freedom",     hue: "#6e8fb0" },
+  { key: "health",      label: "Health & Longevity",          short: "Health",      hue: "#42A1B8" },
+  { key: "development", label: "Material & Human Development", short: "Development", hue: "#77C7A1" },
+  { key: "safety",      label: "Safety",                      short: "Safety",      hue: "#D1BCA3" },
   { key: "power",       label: "Power & Influence",           short: "Power",       hue: "#f58758" },
-  { key: "safety",      label: "Safety",                      short: "Safety",      hue: "#f56c31" },
-  { key: "governance",  label: "Governance & Integrity",      short: "Governance",  hue: "#192a3d" },
+  { key: "freedom",     label: "Freedom & Rights",            short: "Freedom",     hue: "#CD90D6" },
+  { key: "governance",  label: "Governance & Integrity",      short: "Governance",  hue: "#1d77a1" },
 ];
 const TIERS = [
   { name: "Very high",    color: "#0a78a7" },
@@ -283,7 +283,7 @@ export default function App() {
               Even now, Americans hear it regularly: the United States is the greatest country on earth. But is it? And what does that even mean?
             </p>
             <p style={{ fontSize: 15.5, lineHeight: 1.62, margin: "0 0 12px" }}>
-              The answer depends on what you value — and how you balance those values against each other. Global might? Material wealth? Personal freedom? It’s up for debate.
+              The answer depends on what you value — and how you balance those values against each other. Global might? Material wealth? Personal freedom? It’s up for debate.&nbsp;
               <strong style={{ color: C.navy }}>BEACON</strong> allows you to weight six pillars of national performance and well-being as you see fit: health and longevity, material and human development, freedom and rights, safety, governance and integrity, and a country’s global power and influence.
             </p>
             <p style={{ fontSize: 15.5, lineHeight: 1.62, margin: "0 0 18px" }}>
