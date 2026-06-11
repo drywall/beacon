@@ -1,0 +1,13 @@
+Put your two Requiem font files in THIS folder:
+
+    RequiemText-HTF-Roman.woff2
+    RequiemText-HTF-Italic.woff2
+
+They'll be served at /fonts/RequiemText-HTF-Roman.woff2 (and -Italic),
+which is exactly what the @font-face rules in src/App.jsx point to.
+
+Grab them from your WordPress media library, or from:
+    https://byrnecreative.com/wp-content/uploads/2022/02/RequiemText-HTF-Roman.woff2
+    https://byrnecreative.com/wp-content/uploads/2022/02/RequiemText-HTF-Italic.woff2
+
+Keep the filenames as-is. You can delete this .txt once the fonts are in.

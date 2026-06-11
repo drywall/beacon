@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BEACON — Byrne Evaluation And Comparison Of Nations</title>
+
+    <!-- Warm up the Typekit connection before the kit CSS / font files are requested.
+         Two preconnects: one crossorigin (for the font files, fetched in CORS mode),
+         one plain (for the stylesheet, fetched without CORS). -->
+    <link id="tk-preconnect" rel="preconnect" href="https://use.typekit.net" crossorigin />
+    <link id="tk-preconnect-css" rel="preconnect" href="https://use.typekit.net" />
+
+    <!-- Start the primary Requiem face downloading during HTML parse.
+         crossorigin is required even though the file is same-origin: fonts are always
+         fetched in CORS mode, so the preload must match the @font-face request. -->
+    <link id="tk-preload-requiem" rel="preload" as="font" type="font/woff2"
+          href="/fonts/RequiemText-HTF-Roman.woff2" crossorigin />
+
+    <!-- Hypatia Sans Pro (Adobe Fonts / Typekit kit) -->
+    <link id="tk-hypatia" rel="stylesheet" href="https://use.typekit.net/jqp6jnv.css" />
+
+    <!-- Minimal reset so the coral header reaches the edges and the paper bg fills overscroll -->
+    <style>html,body,#root{margin:0;min-height:100%;background:#FAFBFC;}</style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
