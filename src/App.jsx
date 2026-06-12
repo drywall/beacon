@@ -224,7 +224,7 @@ export default function App() {
   );
   const sectionTitle = (txt) => (
     <div style={{ marginBottom: 14 }}>
-      <h2 style={{ fontFamily: SERIF, fontSize: 22, color: C.navy, fontWeight: 600, fontVariant: "small-caps", letterSpacing: 0.5, margin: 0 }}>{txt}</h2>
+      <h2 style={{ fontFamily: SERIF, fontSize: 22, color: C.navy, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5, margin: 0 }}>{txt}</h2>
       <div style={{ height: 3, width: 46, background: C.coralLt, marginTop: 6, borderRadius: 2 }} />
     </div>
   );
@@ -248,6 +248,8 @@ export default function App() {
         .rowbtn{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:0;font-family:${SANS};color:${C.navy};scroll-margin-top:104px;}
         .rowbtn:hover{background:${C.wash};}
         .rowbtn:focus-visible{outline:2px solid ${C.navy};outline-offset:-2px;}
+        .sharebtn{margin-top:12px;width:100%;font-family:${SANS};font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:700;padding:9px 4px;cursor:pointer;border-radius:6px;border:1px solid #0a78a7;background:transparent;color:#0a78a7;display:flex;align-items:center;justify-content:center;gap:7px;transition:background 120ms,color 120ms;}
+        .sharebtn:hover,.sharebtn.copied{background:#0a78a7;color:#fff;}
         a{color:${C.teal};}
         .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
         @media (max-width:520px){
@@ -327,13 +329,8 @@ export default function App() {
                   <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, cursor: "pointer", color: C.slate, minHeight: 24, padding: "4px 0" }}>
                     <input type="checkbox" checked={showBands} onChange={(e) => setShowBands(e.target.checked)} />Show rank-uncertainty bands
                   </label>
-                  <button onClick={shareConfig} aria-live="polite" style={{
-                    marginTop: 12, width: "100%", fontFamily: SANS, fontSize: 12, letterSpacing: 1, textTransform: "uppercase",
-                    fontWeight: 700, padding: "9px 4px", cursor: "pointer", borderRadius: 6, border: `1px solid ${C.coralText}`,
-                    background: copied ? "#fff" : C.coralText, color: copied ? C.coralText : "#fff",
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "background 120ms, color 120ms",
-                  }}>
-                    {copied ? "Link copied" : "Share current config"}
+                  <button onClick={shareConfig} aria-live="polite" className={`sharebtn${copied ? " copied" : ""}`}>
+                    {copied ? "Link copied" : "Share settings"}
                     {copied ? (
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
                     ) : (
@@ -419,7 +416,7 @@ export default function App() {
         {tab === "methodology" && (
           <div style={{ maxWidth: 760, fontSize: 14.5, lineHeight: 1.62, color: C.slate }}>
             <div style={eyebrow}>How it’s built</div>
-            <h1 style={{ fontFamily: SERIF, fontSize: 32, color: C.navy, margin: "6px 0 10px", fontWeight: 600, fontVariant: "small-caps", letterSpacing: 0.5 }}>Methodology</h1>
+            <h1 style={{ fontFamily: SERIF, fontSize: 32, color: C.navy, margin: "6px 0 10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>Methodology</h1>
             <p>BEACON blends two senses of national “greatness”: how well a country serves the people living in it, and how much it projects power and influence in the world. Five pillars measure quality of national life; the sixth measures global presence. It is built entirely from published, reputable indicators.</p>
 
             {sectionTitle("The six pillars")}
@@ -469,7 +466,7 @@ export default function App() {
         {tab === "about" && (
           <div style={{ maxWidth: 680, fontSize: 15.5, lineHeight: 1.66, color: C.slate }}>
             <div style={eyebrow}>The person behind it</div>
-            <h1 style={{ fontFamily: SERIF, fontSize: 32, color: C.navy, margin: "6px 0 18px", fontWeight: 600, fontVariant: "small-caps", letterSpacing: 0.5 }}>About</h1>
+            <h1 style={{ fontFamily: SERIF, fontSize: 32, color: C.navy, margin: "6px 0 18px", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>About</h1>
             <p style={{ margin: "0 0 14px" }}>
               I’m Ben Byrne — a web developer and UX designer based in Santa Rosa, California, with a cross-disciplinary background that
               runs from design to front-end engineering. I spent close to a decade running a creative agency before moving into in-house
