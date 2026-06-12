@@ -162,6 +162,15 @@ export default function App() {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
+  const [isMobile, setIsMobile] = useState(false); // the controls collapse only applies below this width
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width:520px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   useEffect(() => {
     document.documentElement.lang = "en";
     document.title = "BEACON — Byrne Evaluation And Comparison Of Nations";
@@ -260,7 +269,8 @@ export default function App() {
         .rowbtn:focus-visible{outline:2px solid ${C.navy};outline-offset:-2px;}
         .sharebtn{margin-top:12px;width:100%;font-family:${SANS};font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:700;padding:9px 4px;cursor:pointer;border-radius:6px;border:1px solid #0a78a7;background:transparent;color:#0a78a7;display:flex;align-items:center;justify-content:center;gap:7px;transition:background 120ms,color 120ms;}
         .sharebtn:hover,.sharebtn.copied{background:#0a78a7;color:#fff;}
-        .bcn-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;margin:-6px;color:${C.navy};}
+        .bcn-titlebtn{display:flex;align-items:center;gap:8px;background:none;border:none;padding:6px 8px;margin:-6px -8px;cursor:default;font-family:${SANS};font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${C.navy};}
+        .bcn-caret{display:none;flex:none;}
         a{color:${C.teal};}
         .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
         @media (max-width:520px){
@@ -270,7 +280,8 @@ export default function App() {
           .bcn-pill{order:2;}
           .bcn-score{order:3;}
           .bcn-band{width:100% !important;padding-left:0 !important;order:4;}
-          .bcn-toggle{display:inline-flex !important;align-items:center;}
+          .bcn-titlebtn{cursor:pointer;}
+          .bcn-caret{display:inline-flex !important;}
           .bcn-collapsible.collapsed{display:none;}
           .bcn-collapsible{max-height:calc(100vh - var(--bcn-head-h, 92px) - 84px);max-height:calc(100dvh - var(--bcn-head-h, 92px) - 84px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
         }
@@ -312,13 +323,13 @@ export default function App() {
             <div className="bcn-controls" style={{ flex: "1 1 290px", minWidth: 270, position: "sticky", top: headH, zIndex: 10, background: C.paper, "--bcn-head-h": `${headH}px` }}>
               <div style={{ background: "#fff", border: `1px solid ${C.grey}`, borderRadius: 10, padding: 18 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                  <h2 style={{ fontFamily: SANS, fontSize: 14, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.navy, margin: 0 }}>Weigh the Pillars</h2>
-                  <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <button onClick={() => setWeights({ ...EQUAL })} style={{ fontFamily: MONO, fontSize: 11, letterSpacing: 1, textTransform: "uppercase", color: C.coralText, background: "none", border: "none", cursor: "pointer", padding: "7px 8px", margin: "-7px -8px", fontWeight: 700 }}>Reset</button>
-                    <button className="bcn-toggle" aria-expanded={panelOpen} aria-controls="bcn-controls-body" aria-label={panelOpen ? "Collapse pillar controls" : "Expand pillar controls"} onClick={() => setPanelOpen((o) => !o)}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ transform: panelOpen ? "rotate(180deg)" : "none", transition: "transform 150ms" }}><polyline points="6 9 12 15 18 9" /></svg>
+                  <h2 style={{ margin: 0 }}>
+                    <button className="bcn-titlebtn" aria-expanded={isMobile ? panelOpen : true} aria-controls="bcn-controls-body" onClick={() => setPanelOpen((o) => !o)}>
+                      <svg className="bcn-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ transform: panelOpen ? "rotate(180deg)" : "none", transition: "transform 150ms" }}><polyline points="6 9 12 15 18 9" /></svg>
+                      Weigh the Pillars
                     </button>
-                  </div>
+                  </h2>
+                  <button onClick={() => setWeights({ ...EQUAL })} style={{ fontFamily: MONO, fontSize: 11, letterSpacing: 1, textTransform: "uppercase", color: C.coralText, background: "none", border: "none", cursor: "pointer", padding: "7px 8px", margin: "-7px -8px", fontWeight: 700 }}>Reset</button>
                 </div>
                 <div id="bcn-controls-body" className={`bcn-collapsible${panelOpen ? "" : " collapsed"}`}>
                 <div style={{ height: 3, width: 40, background: C.coralLt, borderRadius: 2, marginBottom: 12 }} />
