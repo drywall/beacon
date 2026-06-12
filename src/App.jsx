@@ -132,7 +132,7 @@ function Band({ p5, p95, median, current, n }) {
     <span style={{ position: "relative", display: "block", height: 16 }}>
       <span style={{ position: "absolute", top: 7, left: 0, right: 0, height: 2, background: C.grey }} />
       <span style={{ position: "absolute", top: 5, left: `${left}%`, width: `${Math.max(1.5, right - left)}%`, height: 6, background: "rgba(245,135,88,0.5)", borderRadius: 3 }} />
-      <span style={{ position: "absolute", top: 3, left: `${x(median)}%`, width: 2, height: 10, background: C.slate, transform: "translateX(-1px)" }} />
+      <span style={{ position: "absolute", top: 3, left: `${x(median)}%`, width: 2, height: 10, background: C.slate, transform: "translateX(-1px)", display: "none" }} />
       <span style={{ position: "absolute", top: 2, left: `${x(current)}%`, width: 10, height: 10, borderRadius: "50%", background: C.coralDot, border: "2px solid #fff", transform: "translate(-5px,0)", boxShadow: "0 1px 2px rgba(0,0,0,.3)" }} />
     </span>
   );
