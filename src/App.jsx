@@ -1,15 +1,9 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 
 import { DATA, META } from "./data";
-const C = {
-  coralLt: "#f58758", coral: "#f56c31", slate: "#3A4F66", navy: "#192a3d",
-  grey: "#e6e7e8", teal: "#0a78a7", paper: "#FAFBFC", white: "#ffffff",
-  wash: "rgba(245,135,88,0.12)", washStrong: "rgba(245,135,88,0.22)",
-  coralText: "#bd571b", coralDot: "#e85f30",
-};
-const SERIF = '"Requiem Text","Requiem","Hoefler Text","Iowan Old Style",Georgia,serif';
-const SANS  = 'avenir-next-lt-pro,"Avenir Next","Segoe UI",system-ui,sans-serif';
-const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
+
+// Colors and font stacks live as CSS custom properties in styles.css (the single
+// source of truth). Inline styles below reference them via var(--c-*) / var(--font-*).
 
 const PILLARS = [
   { key: "health",      label: "Health & Longevity",          short: "Health",      hue: "#42A1B8" },
@@ -109,14 +103,14 @@ function Radar({ p, w = 320, h = 252 }) {
   });
   return (
     <svg width={w} height={h} style={{ display: "block" }} role="img" aria-label={"Radar chart of six pillar scores. " + PILLARS.map((pl) => `${pl.label} ${Math.round(p[pl.key])}`).join(", ") + ", each out of 100."}>
-      {[0.25, 0.5, 0.75, 1].map((f) => <polygon key={f} points={ringPts(f)} fill="none" stroke={C.grey} strokeWidth="1" />)}
-      {PILLARS.map((pl, i) => <line key={pl.key} x1={cx} y1={cy} x2={cx + R * Math.cos(ang(i))} y2={cy + R * Math.sin(ang(i))} stroke={C.grey} strokeWidth="1" />)}
-      <polygon points={dataPts.map((d) => d.join(",")).join(" ")} fill="rgba(245,135,88,0.22)" stroke={C.coral} strokeWidth="2" />
+      {[0.25, 0.5, 0.75, 1].map((f) => <polygon key={f} points={ringPts(f)} fill="none" strokeWidth="1" style={{ stroke: "var(--c-grey)" }} />)}
+      {PILLARS.map((pl, i) => <line key={pl.key} x1={cx} y1={cy} x2={cx + R * Math.cos(ang(i))} y2={cy + R * Math.sin(ang(i))} strokeWidth="1" style={{ stroke: "var(--c-grey)" }} />)}
+      <polygon points={dataPts.map((d) => d.join(",")).join(" ")} strokeWidth="2" style={{ fill: "var(--c-wash-strong)", stroke: "var(--c-coral)" }} />
       {dataPts.map((d, i) => <circle key={i} cx={d[0]} cy={d[1]} r="3.2" fill={PILLARS[i].hue} />)}
       {PILLARS.map((pl, i) => {
         const lx = cx + (R + 16) * Math.cos(ang(i)), ly = cy + (R + 16) * Math.sin(ang(i));
-        return <text key={pl.key} x={lx} y={ly} fontSize="8.5" fill={C.slate} fontFamily={MONO} letterSpacing="0.3"
-          style={{ textTransform: "uppercase" }}
+        return <text key={pl.key} x={lx} y={ly} fontSize="8.5" letterSpacing="0.3"
+          style={{ textTransform: "uppercase", fill: "var(--c-slate)", fontFamily: "var(--font-mono)" }}
           textAnchor={Math.abs(Math.cos(ang(i))) < 0.3 ? "middle" : (Math.cos(ang(i)) > 0 ? "start" : "end")}
           dominantBaseline="middle">{pl.short} {Math.round(p[pl.key])}</text>;
       })}
@@ -140,7 +134,7 @@ function Band({ p5, p95, median, current, n }) {
 
 const fmt = (n, d = 0) => n == null ? "—" : Number(n).toLocaleString(undefined, { maximumFractionDigits: d, minimumFractionDigits: d });
 
-const eyebrow = { fontFamily: MONO, fontSize: 10.5, letterSpacing: 2, textTransform: "uppercase", color: C.coralText, fontWeight: 700 };
+const eyebrow = { fontFamily: "var(--font-mono)", fontSize: 10.5, letterSpacing: 2, textTransform: "uppercase", color: "var(--c-coral-text)", fontWeight: 700 };
 
 export default function App() {
   const initial = useMemo(() => parseConfig(), []);
@@ -236,96 +230,25 @@ export default function App() {
 
   const tabBtn = (id, label) => (
     <button onClick={() => { setTab(id); }} aria-current={tab === id ? "page" : undefined} style={{
-      fontFamily: SANS, fontSize: 12.5, letterSpacing: 1.5, textTransform: "uppercase", padding: "7px 2px", marginRight: 26, cursor: "pointer",
+      fontFamily: "var(--font-sans)", fontSize: 12.5, letterSpacing: 1.5, textTransform: "uppercase", padding: "7px 2px", marginRight: 26, cursor: "pointer",
       background: "transparent", border: "none", borderBottom: `3px solid ${tab === id ? "#fff" : "transparent"}`,
       color: "#fff", opacity: tab === id ? 1 : 0.7, fontWeight: 700,
     }}>{label}</button>
   );
   const sectionTitle = (txt) => (
     <div style={{ marginBottom: 14 }}>
-      <h2 style={{ fontFamily: SERIF, fontSize: 22, color: C.navy, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5, margin: 0 }}>{txt}</h2>
-      <div style={{ height: 3, width: 46, background: C.coralLt, marginTop: 6, borderRadius: 2 }} />
+      <h2 style={{ fontFamily: "var(--font-serif)", fontSize: 22, color: "var(--c-navy)", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5, margin: 0 }}>{txt}</h2>
+      <div style={{ height: 3, width: 46, background: "var(--c-coral-lt)", marginTop: 6, borderRadius: 2 }} />
     </div>
   );
 
   return (
-    <div style={{ background: C.paper, color: C.slate, fontFamily: SANS, minHeight: "100%" }}>
-      <style>{`
-        @font-face{font-family:"Requiem Text";src:url("/fonts/RequiemText-HTF-Roman.woff2") format("woff2"),url("https://byrnecreative.com/wp-content/uploads/2022/02/RequiemText-HTF-Roman.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
-        @font-face{font-family:"Requiem Text";src:url("/fonts/RequiemText-HTF-Italic.woff2") format("woff2"),url("https://byrnecreative.com/wp-content/uploads/2022/02/RequiemText-HTF-Italic.woff2") format("woff2");font-weight:400;font-style:italic;font-display:swap;}
-        @font-face{font-family:"hypatia-sans-pro";src:url("https://use.typekit.net/af/f8d87f/00000000000000003b9adaa2/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
-        @font-face{font-family:"hypatia-sans-pro";src:url("https://use.typekit.net/af/14e069/00000000000000003b9ada9b/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff2");font-weight:700;font-style:normal;font-display:swap;}
-        @font-face{font-family:"hypatia-sans-pro";src:url("https://use.typekit.net/af/a40319/00000000000000003b9ada9f/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3") format("woff2");font-weight:400;font-style:italic;font-display:swap;}
-        @font-face{font-family:"hypatia-sans-pro";src:url("https://use.typekit.net/af/197554/00000000000000003b9ada9c/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i7&v=3") format("woff2");font-weight:700;font-style:italic;font-display:swap;}
-        input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:24px;background:transparent;cursor:pointer;margin:0;}
-        input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:${C.grey};}
-        input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:${C.grey};}
-        input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:${C.coral};cursor:pointer;border:2px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.25);}
-        input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:${C.coral};cursor:pointer;border:2px solid #fff;}
-        input[type=range]:focus-visible{outline:2px solid ${C.navy};outline-offset:3px;border-radius:4px;}
-        a:focus-visible,button:focus-visible,select:focus-visible,input[type=checkbox]:focus-visible{outline:2px solid ${C.navy};outline-offset:2px;border-radius:3px;}
-        .rowbtn{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:0;font-family:${SANS};color:${C.navy};scroll-margin-top:104px;}
-        .rowbtn:hover{background:${C.wash};}
-        .rowbtn:focus-visible{outline:2px solid ${C.navy};outline-offset:-2px;}
-        .sharebtn{margin-top:12px;width:100%;font-family:${SANS};font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:700;padding:9px 4px;cursor:pointer;border-radius:6px;border:1px solid #0a78a7;background:transparent;color:#0a78a7;display:flex;align-items:center;justify-content:center;gap:7px;transition:background 120ms,color 120ms;}
-        .sharebtn:hover,.sharebtn.copied{background:#0a78a7;color:#fff;}
-        .bcn-titlebtn{display:flex;align-items:center;gap:8px;background:none;border:none;padding:6px 8px;margin:-6px -8px;cursor:default;font-family:${SANS};font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${C.navy};}
-        .bcn-caret{display:none;flex:none;}
-        /* rankings table — column layout shared by the header row and each country row */
-        .bcn-head{display:flex;align-items:center;padding:9px 14px;border-bottom:1px solid ${C.grey};font-family:${MONO};font-size:10px;letter-spacing:1px;color:${C.slate};text-transform:uppercase;}
-        .bcn-row{display:flex;align-items:center;padding:10px 14px;font-size:14px;}
-        .bcn-rowcard{border-bottom:1px solid ${C.grey};background:#fff;border-left:3px solid transparent;}
-        .bcn-rowcard.us{background:${C.wash};border-left-color:${C.coral};}
-        .bcn-country{flex:1 1 auto;min-width:0;}
-        .bcn-cname{font-weight:600;color:${C.navy};}
-        .bcn-rowcard.us .bcn-cname{font-weight:700;}
-        .bcn-rank{width:28px;flex:none;font-family:${MONO};color:${C.slate};font-size:13px;}
-        .bcn-pill{width:96px;flex:none;display:flex;gap:2px;align-items:flex-end;height:24px;}
-        .bcn-bar{flex:1;border-radius:1px;}
-        .bcn-score{width:46px;flex:none;text-align:right;font-family:${MONO};font-weight:700;font-size:13.5px;color:${C.navy};}
-        .bcn-band{width:140px;flex:none;padding-left:12px;}
-        .bcn-w-rank{width:28px;flex:none;}
-        .bcn-w-pillars{width:96px;flex:none;}
-        .bcn-w-score{width:46px;flex:none;text-align:right;}
-        .bcn-head-band{width:140px;flex:none;text-align:right;}
-        /* rank-uncertainty band (worse rank left, better right) */
-        .band{position:relative;display:block;height:16px;}
-        .band-track{position:absolute;top:7px;left:0;right:0;height:2px;background:${C.grey};}
-        .band-range{position:absolute;top:5px;height:6px;background:rgba(245,135,88,0.5);border-radius:3px;}
-        .band-median{position:absolute;top:3px;width:2px;height:10px;background:${C.slate};transform:translateX(-1px);display:none;}
-        .band-dot{position:absolute;top:2px;width:10px;height:10px;border-radius:50%;background:${C.coralDot};border:2px solid #fff;transform:translate(-5px,0);box-shadow:0 1px 2px rgba(0,0,0,.3);}
-        /* country detail panel */
-        .bcn-detail{display:flex;gap:26px;flex-wrap:wrap;padding:8px 18px 22px 45px;background:#fbfcfd;}
-        .bcn-detail-radar{flex:0 0 auto;}
-        .bcn-detail-main{flex:1 1 300px;min-width:260px;}
-        .bcn-detail-name{font-family:${SERIF};font-size:18px;margin-bottom:8px;color:${C.navy};font-variant:small-caps;letter-spacing:0.5px;}
-        .bcn-detail-region{font-family:${MONO};font-size:11px;letter-spacing:0.5px;text-transform:uppercase;color:${C.slate};font-variant:normal;}
-        .bcn-detail-table{width:100%;font-size:12.5px;border-collapse:collapse;}
-        .bcn-detail-table tr{border-bottom:1px solid ${C.grey};}
-        .bcn-detail-table td{padding:4px 0;}
-        .bcn-detail-table td:first-child{padding-right:8px;color:${C.slate};}
-        .bcn-detail-table td:last-child{text-align:right;font-family:${MONO};font-weight:600;color:${C.navy};}
-        .bcn-detail-note{font-size:11.5px;color:${C.slate};margin-top:10px;line-height:1.5;}
-        a{color:${C.teal};}
-        .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-        @media (max-width:520px){
-          .bcn-head-band{display:none;}
-          .bcn-detail{padding-left:18px !important;}
-          .bcn-row{flex-wrap:wrap;row-gap:8px;}
-          .bcn-pill{order:2;}
-          .bcn-score{order:3;}
-          .bcn-band{width:100% !important;padding-left:0 !important;order:4;}
-          .bcn-titlebtn{cursor:pointer;}
-          .bcn-caret{display:inline-flex !important;}
-          .bcn-collapsible.collapsed{display:none;}
-          .bcn-collapsible{max-height:calc(100vh - var(--bcn-head-h, 92px) - 84px);max-height:calc(100dvh - var(--bcn-head-h, 92px) - 84px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
-        }
-      `}</style>
+    <div style={{ background: "var(--c-paper)", color: "var(--c-slate)", fontFamily: "var(--font-sans)", minHeight: "100%" }}>
 
       {/* header */}
       <div ref={headRef} style={{ background: "linear-gradient(180deg, #ec6e40 0%, #e85f30 100%)", position: "sticky", top: 0, zIndex: 20, borderBottom: `1px solid rgba(25,42,61,0.12)` }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "16px 20px 0" }}>
-          <div style={{ fontFamily: SERIF, color: "#fff", fontSize: 26, fontWeight: 600, letterSpacing: 0.3 }}>
+          <div style={{ fontFamily: "var(--font-serif)", color: "#fff", fontSize: 26, fontWeight: 600, letterSpacing: 0.3 }}>
             BEACON: Byrne Evaluation And Comparison Of Nations
           </div>
           <div style={{ marginTop: 12 }}>{tabBtn("rankings", "Rankings")}{tabBtn("methodology", "Methodology")}{tabBtn("about", "About")}</div>
@@ -338,7 +261,7 @@ export default function App() {
           <div className="sr-only" aria-live="polite">{`Rankings updated. ${shown.length} countries shown${shown[0] ? `, led by ${shown[0].c}` : ""}.${us ? ` United States ranks ${us.rank} of ${N} overall.` : ""}`}</div>
           {/* intro */}
           <div style={{ maxWidth: 1180, marginBottom: 40 }}>
-            <h1 style={{ fontFamily: SERIF, fontSize: 36, lineHeight: 1.1, margin: "6px 0 16px", fontWeight: 400, color: C.navy, fontStyle: "italic" }}>
+            <h1 style={{ fontFamily: "var(--font-serif)", fontSize: 36, lineHeight: 1.1, margin: "6px 0 16px", fontWeight: 400, color: "var(--c-navy)", fontStyle: "italic" }}>
               Greatest country on earth? You decide.
             </h1>
             <p style={{ fontSize: 15.5, lineHeight: 1.62, margin: "0 0 12px" }}>
@@ -346,7 +269,7 @@ export default function App() {
             </p>
             <p style={{ fontSize: 15.5, lineHeight: 1.62, margin: "0 0 12px" }}>
               The answer depends on what you value — and how you balance those values against each other. Global might? Material wealth? Personal freedom? It’s up for debate.&nbsp;
-              <strong style={{ color: C.navy }}>BEACON</strong> allows you to weight six pillars of national performance and well-being as you see fit: health and longevity, material and human development, freedom and rights, safety, governance and integrity, and a country’s global power and influence.
+              <strong style={{ color: "var(--c-navy)" }}>BEACON</strong> allows you to weight six pillars of national performance and well-being as you see fit: health and longevity, material and human development, freedom and rights, safety, governance and integrity, and a country’s global power and influence.
             </p>
             <p style={{ fontSize: 15.5, lineHeight: 1.62, margin: "0 0 18px" }}>
               Below are {N} countries scored on those six pillars from reputable sources. You decide how much each pillar counts. The rankings then update as you go.
@@ -355,8 +278,8 @@ export default function App() {
 
           <div style={{ display: "flex", gap: 26, flexWrap: "wrap", alignItems: "flex-start" }}>
             {/* controls — raised above the scrolling list so nothing bleeds through */}
-            <div className="bcn-controls" style={{ flex: "1 1 290px", minWidth: 270, position: "sticky", top: headH, zIndex: 10, background: C.paper, "--bcn-head-h": `${headH}px` }}>
-              <div style={{ background: "#fff", border: `1px solid ${C.grey}`, borderRadius: 10, padding: 18 }}>
+            <div className="bcn-controls" style={{ flex: "1 1 290px", minWidth: 270, position: "sticky", top: headH, zIndex: 10, background: "var(--c-paper)", "--bcn-head-h": `${headH}px` }}>
+              <div style={{ background: "#fff", border: "1px solid var(--c-grey)", borderRadius: 10, padding: 18 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
                   <h2 style={{ margin: 0 }}>
                     <button className="bcn-titlebtn" aria-expanded={isMobile ? panelOpen : true} aria-controls="bcn-controls-body" onClick={() => setPanelOpen((o) => !o)}>
@@ -364,37 +287,37 @@ export default function App() {
                       Weigh the Pillars
                     </button>
                   </h2>
-                  <button onClick={() => setWeights({ ...EQUAL })} style={{ fontFamily: MONO, fontSize: 11, letterSpacing: 1, textTransform: "uppercase", color: C.coralText, background: "none", border: "none", cursor: "pointer", padding: "7px 8px", margin: "-7px -8px", fontWeight: 700 }}>Reset</button>
+                  <button onClick={() => setWeights({ ...EQUAL })} style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: 1, textTransform: "uppercase", color: "var(--c-coral-text)", background: "none", border: "none", cursor: "pointer", padding: "7px 8px", margin: "-7px -8px", fontWeight: 700 }}>Reset</button>
                 </div>
                 <div id="bcn-controls-body" className={`bcn-collapsible${panelOpen ? "" : " collapsed"}`}>
-                <div style={{ height: 3, width: 40, background: C.coralLt, borderRadius: 2, marginBottom: 12 }} />
-                <p style={{ fontSize: 12, color: C.slate, margin: "0 0 14px" }}>Equal weights aren’t neutral — they assert each pillar matters the same. Your call.</p>
+                <div style={{ height: 3, width: 40, background: "var(--c-coral-lt)", borderRadius: 2, marginBottom: 12 }} />
+                <p style={{ fontSize: 12, color: "var(--c-slate)", margin: "0 0 14px" }}>Equal weights aren’t neutral — they assert each pillar matters the same. Your call.</p>
                 {PILLARS.map((p) => (
                   <div key={p.key} style={{ marginBottom: 13 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: C.navy, display: "flex", alignItems: "center", gap: 7 }}>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: "var(--c-navy)", display: "flex", alignItems: "center", gap: 7 }}>
                         <span style={{ width: 10, height: 10, borderRadius: 2, background: p.hue }} />{p.label}
                       </span>
-                      <span style={{ fontFamily: MONO, fontSize: 12, color: C.slate }}>{weights[p.key]}</span>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--c-slate)" }}>{weights[p.key]}</span>
                     </div>
                     <input type="range" min="0" max="100" value={weights[p.key]} aria-label={`Weight for ${p.label}`} style={{ width: "100%" }} onChange={(e) => setW(p.key, +e.target.value)} />
                   </div>
                 ))}
-                <div style={{ borderTop: `1px solid ${C.grey}`, marginTop: 10, paddingTop: 13 }}>
-                  <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: C.navy, marginBottom: 10, marginTop: 0 }}>How pillars combine</h3>
+                <div style={{ borderTop: "1px solid var(--c-grey)", marginTop: 10, paddingTop: 13 }}>
+                  <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "var(--c-navy)", marginBottom: 10, marginTop: 0 }}>How pillars combine</h3>
                   <div style={{ display: "flex", gap: 6, marginBottom: 11 }}>
                     {[["geometric", "Geometric"], ["arithmetic", "Arithmetic"]].map(([v, l]) => (
-                      <button key={v} onClick={() => setMode(v)} aria-pressed={mode === v} style={{ flex: 1, fontSize: 12, letterSpacing: 1, textTransform: "uppercase", fontWeight: 700, fontFamily: SANS, padding: "7px 4px", cursor: "pointer", borderRadius: 6, border: `1px solid ${mode === v ? C.coralText : C.grey}`, background: mode === v ? C.coralText : "#fff", color: mode === v ? "#fff" : C.slate }}>{l}</button>
+                      <button key={v} onClick={() => setMode(v)} aria-pressed={mode === v} style={{ flex: 1, fontSize: 12, letterSpacing: 1, textTransform: "uppercase", fontWeight: 700, fontFamily: "var(--font-sans)", padding: "7px 4px", cursor: "pointer", borderRadius: 6, border: `1px solid ${mode === v ? "var(--c-coral-text)" : "var(--c-grey)"}`, background: mode === v ? "var(--c-coral-text)" : "#fff", color: mode === v ? "#fff" : "var(--c-slate)" }}>{l}</button>
                     ))}
                   </div>
-                  <div style={{ fontSize: 12, color: C.slate, lineHeight: 1.45, marginBottom: 13 }}>
+                  <div style={{ fontSize: 12, color: "var(--c-slate)", lineHeight: 1.45, marginBottom: 13 }}>
                     {mode === "geometric" ? "Geometric mean penalizes imbalance — no riding one stellar pillar while flunking another." : "Arithmetic mean lets a strong pillar fully offset a weak one."}
                   </div>
-                  <label htmlFor="bcn-region" style={{ display: "block", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: C.navy, marginBottom: 6 }}>Region</label>
-                  <select id="bcn-region" value={region} onChange={(e) => setRegion(e.target.value)} style={{ width: "100%", fontSize: 13, padding: "6px 8px", borderRadius: 6, border: `1px solid ${C.grey}`, background: "#fff", marginBottom: 12, fontFamily: SANS, color: C.navy }}>
+                  <label htmlFor="bcn-region" style={{ display: "block", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "var(--c-navy)", marginBottom: 6 }}>Region</label>
+                  <select id="bcn-region" value={region} onChange={(e) => setRegion(e.target.value)} style={{ width: "100%", fontSize: 13, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--c-grey)", background: "#fff", marginBottom: 12, fontFamily: "var(--font-sans)", color: "var(--c-navy)" }}>
                     {regions.map((r) => <option key={r}>{r}</option>)}
                   </select>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, cursor: "pointer", color: C.slate, minHeight: 24, padding: "4px 0" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, cursor: "pointer", color: "var(--c-slate)", minHeight: 24, padding: "4px 0" }}>
                     <input type="checkbox" checked={showBands} onChange={(e) => setShowBands(e.target.checked)} />Show rank-uncertainty bands
                   </label>
                   <button onClick={shareConfig} aria-live="polite" className={`sharebtn${copied ? " copied" : ""}`}>
@@ -413,11 +336,11 @@ export default function App() {
             {/* rankings */}
             <div style={{ flex: "2 1 560px", minWidth: 340, position: "relative", zIndex: 1 }}>
               {showBands && (
-                <div style={{ background: C.wash, border: `1px solid ${C.grey}`, borderLeft: `3px solid ${C.coralLt}`, borderRadius: 8, padding: "10px 14px", marginBottom: 12, fontSize: 12.5, color: C.slate, lineHeight: 1.5 }}>
-                  The bar spans where each country lands across 500 random weightings. Short bar = robust rank; long bar = mostly an artifact of weighting. The <span style={{ color: C.coralDot, fontWeight: 700 }}>●</span> marks its rank under your current weights. Click any country for details.
+                <div style={{ background: "var(--c-wash)", border: "1px solid var(--c-grey)", borderLeft: "3px solid var(--c-coral-lt)", borderRadius: 8, padding: "10px 14px", marginBottom: 12, fontSize: 12.5, color: "var(--c-slate)", lineHeight: 1.5 }}>
+                  The bar spans where each country lands across 500 random weightings. Short bar = robust rank; long bar = mostly an artifact of weighting. The <span style={{ color: "var(--c-coral-dot)", fontWeight: 700 }}>●</span> marks its rank under your current weights. Click any country for details.
                 </div>
               )}
-              <div style={{ background: "#fff", border: `1px solid ${C.grey}`, borderRadius: 10, overflow: "hidden" }}>
+              <div style={{ background: "#fff", border: "1px solid var(--c-grey)", borderRadius: 10, overflow: "hidden" }}>
                 <div className="bcn-head">
                   <span className="bcn-w-rank">#</span><span className="bcn-country">Country</span>
                   <span className="bcn-w-pillars">Pillars</span>
@@ -473,7 +396,7 @@ export default function App() {
                   );
                 })}
               </div>
-              <div style={{ fontSize: 11.5, color: C.slate, marginTop: 14, lineHeight: 1.55 }}>
+              <div style={{ fontSize: 11.5, color: "var(--c-slate)", marginTop: 14, lineHeight: 1.55 }}>
                 Scores are relative to these {N} countries, not absolute. Five pillars gauge quality of national life; the sixth, power and influence, gauges global clout. See Methodology for sources, transforms, and caveats.
               </div>
             </div>
@@ -481,9 +404,9 @@ export default function App() {
         </>}
 
         {tab === "methodology" && (
-          <div style={{ maxWidth: 760, fontSize: 14.5, lineHeight: 1.62, color: C.slate }}>
+          <div style={{ maxWidth: 760, fontSize: 14.5, lineHeight: 1.62, color: "var(--c-slate)" }}>
             <div style={eyebrow}>How it’s built</div>
-            <h1 style={{ fontFamily: SERIF, fontSize: 32, color: C.navy, margin: "6px 0 10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>Methodology</h1>
+            <h1 style={{ fontFamily: "var(--font-serif)", fontSize: 32, color: "var(--c-navy)", margin: "6px 0 10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>Methodology</h1>
             <p>BEACON blends two senses of national “greatness”: how well a country serves the people living in it, and how much it projects power and influence in the world. Five pillars measure quality of national life; the sixth measures global presence. It is built entirely from published, reputable indicators.</p>
 
             {sectionTitle("The six pillars")}
@@ -531,9 +454,9 @@ export default function App() {
         )}
 
         {tab === "about" && (
-          <div style={{ maxWidth: 680, fontSize: 15.5, lineHeight: 1.66, color: C.slate }}>
+          <div style={{ maxWidth: 680, fontSize: 15.5, lineHeight: 1.66, color: "var(--c-slate)" }}>
             <div style={eyebrow}>The person behind it</div>
-            <h1 style={{ fontFamily: SERIF, fontSize: 32, color: C.navy, margin: "6px 0 18px", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>About</h1>
+            <h1 style={{ fontFamily: "var(--font-serif)", fontSize: 32, color: "var(--c-navy)", margin: "6px 0 18px", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>About</h1>
             <p style={{ margin: "0 0 14px" }}>
               I’m Ben Byrne — a web developer and UX designer based in Santa Rosa, California, with a cross-disciplinary background that
               runs from design to front-end engineering. I spent close to a decade running a creative agency before moving into in-house
@@ -550,9 +473,9 @@ export default function App() {
             <div style={eyebrow}>Find me</div>
             <p style={{ margin: "6px 0 0", fontSize: 14.5 }}>
               <a href="https://instagram.com/drywallbmb" target="_blank" rel="noreferrer">Instagram @drywallbmb</a>
-              <span style={{ color: C.grey, margin: "0 8px" }}>·</span>
+              <span style={{ color: "var(--c-grey)", margin: "0 8px" }}>·</span>
               <a href="https://www.threads.net/@drywallbmb" target="_blank" rel="noreferrer">Threads @drywallbmb</a>
-              <span style={{ color: C.grey, margin: "0 8px" }}>·</span>
+              <span style={{ color: "var(--c-grey)", margin: "0 8px" }}>·</span>
               <a href="mailto:ben@byrnecreative.com">ben@byrnecreative.com</a>
             </p>
           </div>
