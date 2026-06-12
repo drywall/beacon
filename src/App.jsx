@@ -129,11 +129,11 @@ function Band({ p5, p95, median, current, n }) {
   const x = (r) => ((n - r) / (n - 1)) * 100;
   const left = x(p95), right = x(p5);
   return (
-    <span style={{ position: "relative", display: "block", height: 16 }}>
-      <span style={{ position: "absolute", top: 7, left: 0, right: 0, height: 2, background: C.grey }} />
-      <span style={{ position: "absolute", top: 5, left: `${left}%`, width: `${Math.max(1.5, right - left)}%`, height: 6, background: "rgba(245,135,88,0.5)", borderRadius: 3 }} />
-      <span style={{ position: "absolute", top: 3, left: `${x(median)}%`, width: 2, height: 10, background: C.slate, transform: "translateX(-1px)", display: "none" }} />
-      <span style={{ position: "absolute", top: 2, left: `${x(current)}%`, width: 10, height: 10, borderRadius: "50%", background: C.coralDot, border: "2px solid #fff", transform: "translate(-5px,0)", boxShadow: "0 1px 2px rgba(0,0,0,.3)" }} />
+    <span className="band">
+      <span className="band-track" />
+      <span className="band-range" style={{ left: `${left}%`, width: `${Math.max(1.5, right - left)}%` }} />
+      <span className="band-median" style={{ left: `${x(median)}%` }} />
+      <span className="band-dot" style={{ left: `${x(current)}%` }} />
     </span>
   );
 }
@@ -271,6 +271,41 @@ export default function App() {
         .sharebtn:hover,.sharebtn.copied{background:#0a78a7;color:#fff;}
         .bcn-titlebtn{display:flex;align-items:center;gap:8px;background:none;border:none;padding:6px 8px;margin:-6px -8px;cursor:default;font-family:${SANS};font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${C.navy};}
         .bcn-caret{display:none;flex:none;}
+        /* rankings table — column layout shared by the header row and each country row */
+        .bcn-head{display:flex;align-items:center;padding:9px 14px;border-bottom:1px solid ${C.grey};font-family:${MONO};font-size:10px;letter-spacing:1px;color:${C.slate};text-transform:uppercase;}
+        .bcn-row{display:flex;align-items:center;padding:10px 14px;font-size:14px;}
+        .bcn-rowcard{border-bottom:1px solid ${C.grey};background:#fff;border-left:3px solid transparent;}
+        .bcn-rowcard.us{background:${C.wash};border-left-color:${C.coral};}
+        .bcn-country{flex:1 1 auto;min-width:0;}
+        .bcn-cname{font-weight:600;color:${C.navy};}
+        .bcn-rowcard.us .bcn-cname{font-weight:700;}
+        .bcn-rank{width:28px;flex:none;font-family:${MONO};color:${C.slate};font-size:13px;}
+        .bcn-pill{width:96px;flex:none;display:flex;gap:2px;align-items:flex-end;height:24px;}
+        .bcn-bar{flex:1;border-radius:1px;}
+        .bcn-score{width:46px;flex:none;text-align:right;font-family:${MONO};font-weight:700;font-size:13.5px;color:${C.navy};}
+        .bcn-band{width:140px;flex:none;padding-left:12px;}
+        .bcn-w-rank{width:28px;flex:none;}
+        .bcn-w-pillars{width:96px;flex:none;}
+        .bcn-w-score{width:46px;flex:none;text-align:right;}
+        .bcn-head-band{width:140px;flex:none;text-align:right;}
+        /* rank-uncertainty band (worse rank left, better right) */
+        .band{position:relative;display:block;height:16px;}
+        .band-track{position:absolute;top:7px;left:0;right:0;height:2px;background:${C.grey};}
+        .band-range{position:absolute;top:5px;height:6px;background:rgba(245,135,88,0.5);border-radius:3px;}
+        .band-median{position:absolute;top:3px;width:2px;height:10px;background:${C.slate};transform:translateX(-1px);display:none;}
+        .band-dot{position:absolute;top:2px;width:10px;height:10px;border-radius:50%;background:${C.coralDot};border:2px solid #fff;transform:translate(-5px,0);box-shadow:0 1px 2px rgba(0,0,0,.3);}
+        /* country detail panel */
+        .bcn-detail{display:flex;gap:26px;flex-wrap:wrap;padding:8px 18px 22px 45px;background:#fbfcfd;}
+        .bcn-detail-radar{flex:0 0 auto;}
+        .bcn-detail-main{flex:1 1 300px;min-width:260px;}
+        .bcn-detail-name{font-family:${SERIF};font-size:18px;margin-bottom:8px;color:${C.navy};font-variant:small-caps;letter-spacing:0.5px;}
+        .bcn-detail-region{font-family:${MONO};font-size:11px;letter-spacing:0.5px;text-transform:uppercase;color:${C.slate};font-variant:normal;}
+        .bcn-detail-table{width:100%;font-size:12.5px;border-collapse:collapse;}
+        .bcn-detail-table tr{border-bottom:1px solid ${C.grey};}
+        .bcn-detail-table td{padding:4px 0;}
+        .bcn-detail-table td:first-child{padding-right:8px;color:${C.slate};}
+        .bcn-detail-table td:last-child{text-align:right;font-family:${MONO};font-weight:600;color:${C.navy};}
+        .bcn-detail-note{font-size:11.5px;color:${C.slate};margin-top:10px;line-height:1.5;}
         a{color:${C.teal};}
         .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
         @media (max-width:520px){
@@ -383,35 +418,33 @@ export default function App() {
                 </div>
               )}
               <div style={{ background: "#fff", border: `1px solid ${C.grey}`, borderRadius: 10, overflow: "hidden" }}>
-                <div className="bcn-head" style={{ display: "flex", alignItems: "center", padding: "9px 14px", borderBottom: `1px solid ${C.grey}`, fontFamily: MONO, fontSize: 10, letterSpacing: 1, color: C.slate, textTransform: "uppercase" }}>
-                  <span style={{ width: 28 }}>#</span><span style={{ flex: 1 }}>Country</span>
-                  <span style={{ width: 96 }}>Pillars</span>
-                  <span style={{ width: 46, textAlign: "right" }}>Score</span>
-                  {showBands && <span className="bcn-head-band" style={{ width: 140, textAlign: "right" }}>Rank range</span>}
+                <div className="bcn-head">
+                  <span className="bcn-w-rank">#</span><span className="bcn-country">Country</span>
+                  <span className="bcn-w-pillars">Pillars</span>
+                  <span className="bcn-w-score">Score</span>
+                  {showBands && <span className="bcn-head-band">Rank range</span>}
                 </div>
                 {shown.map((d) => {
                   const b = bands[d.iso], open = expanded === d.iso, isUS = d.iso === "USA";
                   return (
-                    <div key={d.iso} style={{ borderBottom: `1px solid ${C.grey}`, background: isUS ? C.wash : "#fff", borderLeft: isUS ? `3px solid ${C.coral}` : "3px solid transparent" }}>
+                    <div key={d.iso} className={`bcn-rowcard${isUS ? " us" : ""}`}>
                       <button className="rowbtn" aria-expanded={open} aria-controls={`detail-${d.iso}`} aria-label={`${d.c}, rank ${d.rank} of ${N}, composite score ${d.score.toFixed(1)} of 100`} onClick={() => setExpanded(open ? null : d.iso)}>
-                        <div className="bcn-row" style={{ display: "flex", alignItems: "center", padding: "10px 14px", fontSize: 14 }}>
-                          <span style={{ width: 28, fontFamily: MONO, color: C.slate, fontSize: 13 }}>{d.rank}</span>
-                          <span style={{ flex: 1, minWidth: 0 }}>
-                            <span style={{ fontWeight: isUS ? 700 : 600, color: C.navy }}>{d.c}</span>
+                        <div className="bcn-row">
+                          <span className="bcn-rank">{d.rank}</span>
+                          <span className="bcn-country"><span className="bcn-cname">{d.c}</span></span>
+                          <span className="bcn-pill">
+                            {PILLARS.map((p) => <span key={p.key} className="bcn-bar" role="img" aria-label={`${p.short}: ${Math.round(d.p[p.key])}`} title={`${p.short}: ${Math.round(d.p[p.key])}`} style={{ height: `${Math.max(8, d.p[p.key])}%`, background: p.hue }} />)}
                           </span>
-                          <span className="bcn-pill" style={{ width: 96, display: "flex", gap: 2, alignItems: "flex-end", height: 24 }}>
-                            {PILLARS.map((p) => <span key={p.key} role="img" aria-label={`${p.short}: ${Math.round(d.p[p.key])}`} title={`${p.short}: ${Math.round(d.p[p.key])}`} style={{ flex: 1, height: `${Math.max(8, d.p[p.key])}%`, background: p.hue, borderRadius: 1 }} />)}
-                          </span>
-                          <span className="bcn-score" style={{ width: 46, textAlign: "right", fontFamily: MONO, fontWeight: 700, fontSize: 13.5, color: C.navy }}>{d.score.toFixed(1)}</span>
-                          {showBands && <span className="bcn-band" style={{ width: 140, paddingLeft: 12 }}><Band p5={b.p5} p95={b.p95} median={b.median} current={d.rank} n={N} /></span>}
+                          <span className="bcn-score">{d.score.toFixed(1)}</span>
+                          {showBands && <span className="bcn-band"><Band p5={b.p5} p95={b.p95} median={b.median} current={d.rank} n={N} /></span>}
                         </div>
                       </button>
                       {open && (
-                        <div id={`detail-${d.iso}`} className="bcn-detail" role="region" aria-label={`${d.c} — detail`} style={{ display: "flex", gap: 26, flexWrap: "wrap", padding: "8px 18px 22px 45px", background: "#fbfcfd" }}>
-                          <div style={{ flex: "0 0 auto" }}><Radar p={d.p} /></div>
-                          <div style={{ flex: "1 1 300px", minWidth: 260 }}>
-                            <div style={{ fontFamily: SERIF, fontSize: 18, marginBottom: 8, color: C.navy, fontVariant: "small-caps", letterSpacing: 0.5 }}>{d.c} <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: 0.5, textTransform: "uppercase", color: C.slate, fontVariant: "normal" }}>· {d.region}</span></div>
-                            <table style={{ width: "100%", fontSize: 12.5, borderCollapse: "collapse" }}>
+                        <div id={`detail-${d.iso}`} className="bcn-detail" role="region" aria-label={`${d.c} — detail`}>
+                          <div className="bcn-detail-radar"><Radar p={d.p} /></div>
+                          <div className="bcn-detail-main">
+                            <div className="bcn-detail-name">{d.c} <span className="bcn-detail-region">· {d.region}</span></div>
+                            <table className="bcn-detail-table">
                               <tbody>
                                 {[
                                   ["Life expectancy", `${fmt(d.raw.le, 1)} yrs`],
@@ -423,14 +456,14 @@ export default function App() {
                                   ["Freedom House (0–100)", fmt(d.raw.fh)],
                                   ["Press freedom RSF (0–100)", fmt(d.raw.rsf, 1)],
                                 ].map(([k, v]) => (
-                                  <tr key={k} style={{ borderBottom: `1px solid ${C.grey}` }}>
-                                    <td style={{ padding: "4px 8px 4px 0", color: C.slate }}>{k}</td>
-                                    <td style={{ padding: "4px 0", textAlign: "right", fontFamily: MONO, fontWeight: 600, color: C.navy }}>{v}</td>
+                                  <tr key={k}>
+                                    <td>{k}</td>
+                                    <td>{v}</td>
                                   </tr>
                                 ))}
                               </tbody>
                             </table>
-                            <div style={{ fontSize: 11.5, color: C.slate, marginTop: 10, lineHeight: 1.5 }}>
+                            <div className="bcn-detail-note">
                               Across 500 random weightings this country ranges between #{b.p5} and #{b.p95} (median #{b.median}). The radar shows its six pillar scores, each 0–100 relative to the {N}-country sample.
                             </div>
                           </div>
