@@ -1,0 +1,180 @@
+Entity,Code,Year,Corruption Perceptions Index,World region according to OWID
+Afghanistan,AFG,2024,17,Asia
+Albania,ALB,2024,42,Europe
+Algeria,DZA,2024,34,Africa
+Angola,AGO,2024,32,Africa
+Argentina,ARG,2024,37,South America
+Armenia,ARM,2024,47,Asia
+Australia,AUS,2024,77,Oceania
+Austria,AUT,2024,67,Europe
+Azerbaijan,AZE,2024,22,Asia
+Bahamas,BHS,2024,65,North America
+Bahrain,BHR,2024,53,Asia
+Bangladesh,BGD,2024,23,Asia
+Barbados,BRB,2024,68,North America
+Belarus,BLR,2024,33,Europe
+Belgium,BEL,2024,69,Europe
+Benin,BEN,2024,45,Africa
+Bhutan,BTN,2024,72,Asia
+Bolivia,BOL,2024,28,South America
+Bosnia and Herzegovina,BIH,2024,33,Europe
+Botswana,BWA,2024,57,Africa
+Brazil,BRA,2024,34,South America
+Bulgaria,BGR,2024,43,Europe
+Burkina Faso,BFA,2024,41,Africa
+Burundi,BDI,2024,17,Africa
+Cambodia,KHM,2024,21,Asia
+Cameroon,CMR,2024,26,Africa
+Canada,CAN,2024,75,North America
+Cape Verde,CPV,2024,62,Africa
+Central African Republic,CAF,2024,24,Africa
+Chad,TCD,2024,21,Africa
+Chile,CHL,2024,63,South America
+China,CHN,2024,43,Asia
+Colombia,COL,2024,39,South America
+Comoros,COM,2024,21,Africa
+Congo,COG,2024,23,Africa
+Costa Rica,CRI,2024,58,North America
+Cote d'Ivoire,CIV,2024,45,Africa
+Croatia,HRV,2024,47,Europe
+Cuba,CUB,2024,41,North America
+Cyprus,CYP,2024,56,Europe
+Czechia,CZE,2024,56,Europe
+Democratic Republic of Congo,COD,2024,20,Africa
+Denmark,DNK,2024,90,Europe
+Djibouti,DJI,2024,31,Africa
+Dominica,DMA,2024,60,North America
+Dominican Republic,DOM,2024,36,North America
+East Timor,TLS,2024,44,Asia
+Ecuador,ECU,2024,32,South America
+Egypt,EGY,2024,30,Africa
+El Salvador,SLV,2024,30,North America
+Equatorial Guinea,GNQ,2024,13,Africa
+Eritrea,ERI,2024,13,Africa
+Estonia,EST,2024,76,Europe
+Eswatini,SWZ,2024,27,Africa
+Ethiopia,ETH,2024,37,Africa
+Fiji,FJI,2024,55,Oceania
+Finland,FIN,2024,88,Europe
+France,FRA,2024,67,Europe
+Gabon,GAB,2024,27,Africa
+Gambia,GMB,2024,38,Africa
+Georgia,GEO,2024,53,Asia
+Germany,DEU,2024,75,Europe
+Ghana,GHA,2024,42,Africa
+Greece,GRC,2024,49,Europe
+Grenada,GRD,2024,56,North America
+Guatemala,GTM,2024,25,North America
+Guinea,GIN,2024,28,Africa
+Guinea-Bissau,GNB,2024,21,Africa
+Guyana,GUY,2024,39,South America
+Haiti,HTI,2024,16,North America
+Honduras,HND,2024,22,North America
+Hungary,HUN,2024,41,Europe
+Iceland,ISL,2024,77,Europe
+India,IND,2024,38,Asia
+Indonesia,IDN,2024,37,Asia
+Iran,IRN,2024,23,Asia
+Iraq,IRQ,2024,26,Asia
+Ireland,IRL,2024,77,Europe
+Israel,ISR,2024,64,Asia
+Italy,ITA,2024,54,Europe
+Jamaica,JAM,2024,44,North America
+Japan,JPN,2024,71,Asia
+Jordan,JOR,2024,49,Asia
+Kazakhstan,KAZ,2024,40,Asia
+Kenya,KEN,2024,32,Africa
+Kosovo,OWID_KOS,2024,44,Europe
+Kuwait,KWT,2024,46,Asia
+Kyrgyzstan,KGZ,2024,25,Asia
+Laos,LAO,2024,33,Asia
+Latvia,LVA,2024,59,Europe
+Lebanon,LBN,2024,22,Asia
+Lesotho,LSO,2024,37,Africa
+Liberia,LBR,2024,27,Africa
+Libya,LBY,2024,13,Africa
+Lithuania,LTU,2024,63,Europe
+Luxembourg,LUX,2024,81,Europe
+Madagascar,MDG,2024,26,Africa
+Malawi,MWI,2024,34,Africa
+Malaysia,MYS,2024,50,Asia
+Maldives,MDV,2024,38,Asia
+Mali,MLI,2024,27,Africa
+Malta,MLT,2024,46,Europe
+Mauritania,MRT,2024,30,Africa
+Mauritius,MUS,2024,51,Africa
+Mexico,MEX,2024,26,North America
+Moldova,MDA,2024,43,Europe
+Mongolia,MNG,2024,33,Asia
+Montenegro,MNE,2024,46,Europe
+Morocco,MAR,2024,37,Africa
+Mozambique,MOZ,2024,25,Africa
+Myanmar,MMR,2024,16,Asia
+Namibia,NAM,2024,49,Africa
+Nepal,NPL,2024,34,Asia
+Netherlands,NLD,2024,78,Europe
+New Zealand,NZL,2024,83,Oceania
+Nicaragua,NIC,2024,14,North America
+Niger,NER,2024,34,Africa
+Nigeria,NGA,2024,26,Africa
+North Korea,PRK,2024,15,Asia
+North Macedonia,MKD,2024,40,Europe
+Norway,NOR,2024,81,Europe
+Oman,OMN,2024,55,Asia
+Pakistan,PAK,2024,27,Asia
+Panama,PAN,2024,33,North America
+Papua New Guinea,PNG,2024,31,Oceania
+Paraguay,PRY,2024,24,South America
+Peru,PER,2024,31,South America
+Philippines,PHL,2024,33,Asia
+Poland,POL,2024,53,Europe
+Portugal,PRT,2024,57,Europe
+Qatar,QAT,2024,59,Asia
+Romania,ROU,2024,46,Europe
+Russia,RUS,2024,22,Europe
+Rwanda,RWA,2024,57,Africa
+Saint Lucia,LCA,2024,59,North America
+Saint Vincent and the Grenadines,VCT,2024,63,North America
+Sao Tome and Principe,STP,2024,45,Africa
+Saudi Arabia,SAU,2024,59,Asia
+Senegal,SEN,2024,45,Africa
+Serbia,SRB,2024,35,Europe
+Seychelles,SYC,2024,72,Africa
+Sierra Leone,SLE,2024,33,Africa
+Singapore,SGP,2024,84,Asia
+Slovakia,SVK,2024,49,Europe
+Slovenia,SVN,2024,60,Europe
+Solomon Islands,SLB,2024,43,Oceania
+Somalia,SOM,2024,9,Africa
+South Africa,ZAF,2024,41,Africa
+South Korea,KOR,2024,64,Asia
+South Sudan,SSD,2024,8,Africa
+Spain,ESP,2024,56,Europe
+Sri Lanka,LKA,2024,32,Asia
+Sudan,SDN,2024,15,Africa
+Suriname,SUR,2024,40,South America
+Sweden,SWE,2024,80,Europe
+Switzerland,CHE,2024,81,Europe
+Syria,SYR,2024,12,Asia
+Taiwan,TWN,2024,67,Asia
+Tajikistan,TJK,2024,19,Asia
+Tanzania,TZA,2024,41,Africa
+Thailand,THA,2024,34,Asia
+Togo,TGO,2024,32,Africa
+Trinidad and Tobago,TTO,2024,41,North America
+Tunisia,TUN,2024,39,Africa
+Turkey,TUR,2024,34,Asia
+Turkmenistan,TKM,2024,17,Asia
+Uganda,UGA,2024,26,Africa
+Ukraine,UKR,2024,35,Europe
+United Arab Emirates,ARE,2024,68,Asia
+United Kingdom,GBR,2024,71,Europe
+United States,USA,2024,65,North America
+Uruguay,URY,2024,76,South America
+Uzbekistan,UZB,2024,32,Asia
+Vanuatu,VUT,2024,50,Oceania
+Venezuela,VEN,2024,10,South America
+Vietnam,VNM,2024,40,Asia
+Yemen,YEM,2024,13,Asia
+Zambia,ZMB,2024,39,Africa
+Zimbabwe,ZWE,2024,21,Africa
