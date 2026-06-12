@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 
 import { DATA, META } from "./data";
 const C = {
@@ -151,6 +151,16 @@ export default function App() {
   const [expanded, setExpanded] = useState(null);
   const [showBands, setShowBands] = useState(initial.showBands ?? true);
   const [copied, setCopied] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false); // controls collapse, mobile only
+  const headRef = useRef(null);
+  const [headH, setHeadH] = useState(92); // measured site-header height; sticky offset for the controls
+
+  useEffect(() => {
+    const measure = () => headRef.current && setHeadH(headRef.current.offsetHeight);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = "en";
@@ -250,18 +260,24 @@ export default function App() {
         .rowbtn:focus-visible{outline:2px solid ${C.navy};outline-offset:-2px;}
         .sharebtn{margin-top:12px;width:100%;font-family:${SANS};font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:700;padding:9px 4px;cursor:pointer;border-radius:6px;border:1px solid #0a78a7;background:transparent;color:#0a78a7;display:flex;align-items:center;justify-content:center;gap:7px;transition:background 120ms,color 120ms;}
         .sharebtn:hover,.sharebtn.copied{background:#0a78a7;color:#fff;}
+        .bcn-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;margin:-6px;color:${C.navy};}
         a{color:${C.teal};}
         .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
         @media (max-width:520px){
-          .bcn-head{display:none;}
+          .bcn-head-band{display:none;}
+          .bcn-detail{padding-left:18px !important;}
           .bcn-row{flex-wrap:wrap;row-gap:8px;}
-          .bcn-pill{order:3;}
+          .bcn-pill{order:2;}
+          .bcn-score{order:3;}
           .bcn-band{width:100% !important;padding-left:0 !important;order:4;}
+          .bcn-toggle{display:inline-flex !important;align-items:center;}
+          .bcn-collapsible.collapsed{display:none;}
+          .bcn-collapsible{max-height:calc(100vh - var(--bcn-head-h, 92px) - 84px);max-height:calc(100dvh - var(--bcn-head-h, 92px) - 84px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
         }
       `}</style>
 
       {/* header */}
-      <div style={{ background: "linear-gradient(180deg, #ec6e40 0%, #e85f30 100%)", position: "sticky", top: 0, zIndex: 20, borderBottom: `1px solid rgba(25,42,61,0.12)` }}>
+      <div ref={headRef} style={{ background: "linear-gradient(180deg, #ec6e40 0%, #e85f30 100%)", position: "sticky", top: 0, zIndex: 20, borderBottom: `1px solid rgba(25,42,61,0.12)` }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "16px 20px 0" }}>
           <div style={{ fontFamily: SERIF, color: "#fff", fontSize: 26, fontWeight: 600, letterSpacing: 0.3 }}>
             BEACON: Byrne Evaluation And Comparison Of Nations
@@ -293,12 +309,18 @@ export default function App() {
 
           <div style={{ display: "flex", gap: 26, flexWrap: "wrap", alignItems: "flex-start" }}>
             {/* controls — raised above the scrolling list so nothing bleeds through */}
-            <div style={{ flex: "1 1 290px", minWidth: 270, position: "sticky", top: 92, zIndex: 10, background: C.paper }}>
+            <div className="bcn-controls" style={{ flex: "1 1 290px", minWidth: 270, position: "sticky", top: headH, zIndex: 10, background: C.paper, "--bcn-head-h": `${headH}px` }}>
               <div style={{ background: "#fff", border: `1px solid ${C.grey}`, borderRadius: 10, padding: 18 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
                   <h2 style={{ fontFamily: SANS, fontSize: 14, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.navy, margin: 0 }}>Weigh the Pillars</h2>
-                  <button onClick={() => setWeights({ ...EQUAL })} style={{ fontFamily: MONO, fontSize: 11, letterSpacing: 1, textTransform: "uppercase", color: C.coralText, background: "none", border: "none", cursor: "pointer", padding: "7px 8px", margin: "-7px -8px", fontWeight: 700 }}>Reset</button>
+                  <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <button onClick={() => setWeights({ ...EQUAL })} style={{ fontFamily: MONO, fontSize: 11, letterSpacing: 1, textTransform: "uppercase", color: C.coralText, background: "none", border: "none", cursor: "pointer", padding: "7px 8px", margin: "-7px -8px", fontWeight: 700 }}>Reset</button>
+                    <button className="bcn-toggle" aria-expanded={panelOpen} aria-controls="bcn-controls-body" aria-label={panelOpen ? "Collapse pillar controls" : "Expand pillar controls"} onClick={() => setPanelOpen((o) => !o)}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ transform: panelOpen ? "rotate(180deg)" : "none", transition: "transform 150ms" }}><polyline points="6 9 12 15 18 9" /></svg>
+                    </button>
+                  </div>
                 </div>
+                <div id="bcn-controls-body" className={`bcn-collapsible${panelOpen ? "" : " collapsed"}`}>
                 <div style={{ height: 3, width: 40, background: C.coralLt, borderRadius: 2, marginBottom: 12 }} />
                 <p style={{ fontSize: 12, color: C.slate, margin: "0 0 14px" }}>Equal weights aren’t neutral — they assert each pillar matters the same. Your call.</p>
                 {PILLARS.map((p) => (
@@ -338,6 +360,7 @@ export default function App() {
                     )}
                   </button>
                 </div>
+                </div>
               </div>
             </div>
 
@@ -353,7 +376,7 @@ export default function App() {
                   <span style={{ width: 28 }}>#</span><span style={{ flex: 1 }}>Country</span>
                   <span style={{ width: 96 }}>Pillars</span>
                   <span style={{ width: 46, textAlign: "right" }}>Score</span>
-                  {showBands && <span style={{ width: 140, textAlign: "right" }}>Rank range</span>}
+                  {showBands && <span className="bcn-head-band" style={{ width: 140, textAlign: "right" }}>Rank range</span>}
                 </div>
                 {shown.map((d) => {
                   const b = bands[d.iso], open = expanded === d.iso, isUS = d.iso === "USA";
@@ -368,12 +391,12 @@ export default function App() {
                           <span className="bcn-pill" style={{ width: 96, display: "flex", gap: 2, alignItems: "flex-end", height: 24 }}>
                             {PILLARS.map((p) => <span key={p.key} role="img" aria-label={`${p.short}: ${Math.round(d.p[p.key])}`} title={`${p.short}: ${Math.round(d.p[p.key])}`} style={{ flex: 1, height: `${Math.max(8, d.p[p.key])}%`, background: p.hue, borderRadius: 1 }} />)}
                           </span>
-                          <span style={{ width: 46, textAlign: "right", fontFamily: MONO, fontWeight: 700, fontSize: 13.5, color: C.navy }}>{d.score.toFixed(1)}</span>
+                          <span className="bcn-score" style={{ width: 46, textAlign: "right", fontFamily: MONO, fontWeight: 700, fontSize: 13.5, color: C.navy }}>{d.score.toFixed(1)}</span>
                           {showBands && <span className="bcn-band" style={{ width: 140, paddingLeft: 12 }}><Band p5={b.p5} p95={b.p95} median={b.median} current={d.rank} n={N} /></span>}
                         </div>
                       </button>
                       {open && (
-                        <div id={`detail-${d.iso}`} role="region" aria-label={`${d.c} — detail`} style={{ display: "flex", gap: 26, flexWrap: "wrap", padding: "8px 18px 22px 45px", background: "#fbfcfd" }}>
+                        <div id={`detail-${d.iso}`} className="bcn-detail" role="region" aria-label={`${d.c} — detail`} style={{ display: "flex", gap: 26, flexWrap: "wrap", padding: "8px 18px 22px 45px", background: "#fbfcfd" }}>
                           <div style={{ flex: "0 0 auto" }}><Radar p={d.p} /></div>
                           <div style={{ flex: "1 1 300px", minWidth: 260 }}>
                             <div style={{ fontFamily: SERIF, fontSize: 18, marginBottom: 8, color: C.navy, fontVariant: "small-caps", letterSpacing: 0.5 }}>{d.c} <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: 0.5, textTransform: "uppercase", color: C.slate, fontVariant: "normal" }}>· {d.region}</span></div>
