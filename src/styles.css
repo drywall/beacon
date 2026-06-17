@@ -209,7 +209,7 @@ a { color: var(--c-teal); }
 .band-median { position: absolute; top: 3px; width: 2px; height: 10px; background: var(--c-slate); transform: translateX(-1px); display: none; }
 .band-dot {
   position: absolute;
-  top: 2px;
+  top: 1px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
